@@ -75,7 +75,7 @@ export function resultOf(tags: TagArray[], isWhite: boolean): string | undefined
 }
 
 let filteredChapters = [];
-let filterChInputValue = '';
+let filteredChInputValue = '';
 
 export function view(ctrl: StudyCtrl): VNode {
   const canContribute = ctrl.members.canContribute(),
@@ -108,14 +108,14 @@ export function view(ctrl: StudyCtrl): VNode {
       else lichess.loadScript('javascripts/vendor/Sortable.min.js').then(makeSortable);
     }
   }
-  const filterChapters = (event) => {
-    filterChInputValue = event.target.value;
+  const filterChapters = event => {
+    filteredChInputValue = event.target.value;
     filteredChapters = ctrl.chapters
       .list()
       .filter(chapter => chapter.name.toLowerCase().includes(event.target.value.toLowerCase()));
   };
 
-  const mapChapters = (array) => {
+  const mapChapters = array => {
     return array.map((chapter, i) => {
       const editing = ctrl.chapters.editForm.isEditing(chapter.id),
         loading = ctrl.vm.loading && chapter.id === ctrl.vm.nextChapterId,
@@ -169,19 +169,16 @@ export function view(ctrl: StudyCtrl): VNode {
     [
       ctrl.chapters.list().length > 7
         ? h('input.chapter-filter', {
-            on: { input: filterChapters },
-            attrs: { value: filterChInputValue, label: 'filter chapters', placeholder: 'filter chapters' },
+            attrs: { label: 'Filter Chapters', placeholder: 'Filter Chapters' },
             hook: bind('input', filterChapters, ctrl.redraw),
           })
         : null,
     ]
       .concat(
-        ctrl.chapters.list().length > 7
-          ? filterChInputValue === ''
-            ? mapChapters(ctrl.chapters.list())
-            : filteredChapters.length >= 1
+        filteredChInputValue.length > 0 && ctrl.chapters.list().length > 7
+          ? filteredChapters.length > 0
             ? mapChapters(filteredChapters)
-            : h('h3', 'no results')
+            : h('h3', 'No Results')
           : mapChapters(ctrl.chapters.list())
       )
       .concat(
