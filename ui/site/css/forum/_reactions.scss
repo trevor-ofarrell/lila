@@ -31,11 +31,12 @@
   }
 
   button.no {
-    opacity: 0;
+    display: none;
   }
 
   .forum-post:hover &-auth button.no {
     opacity: 0.4;
+    display: block;
     filter: grayscale(100%);
 
     &:hover {
@@ -52,6 +53,7 @@
   button.yes {
     order: 0;
     opacity: 1;
+    display: block;
   }
 
   img {
