@@ -33,6 +33,9 @@ case class Post(
   def id = _id
 
   def showAuthor = (author map (_.trim) filter ("" !=)) | (if (~modIcon) User.anonymous else User.anonMod)
+  println(User.anonMod)
+  println(User.anonymous)
+  println(author)
 
   def showUserIdOrAuthor = if (erased) "<erased>" else userId | showAuthor
 
